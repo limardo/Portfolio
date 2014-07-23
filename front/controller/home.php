@@ -1,7 +1,6 @@
 <?php
 
-namespace Front\Controller
-{
+namespace Front\Controller {
 
     class home extends \Core\Engine\Controller
     {
@@ -12,19 +11,14 @@ namespace Front\Controller
          */
         public function login()
         {
-
-            $this->load->model( 'admin/user/user' );
-            $this->load->model( 'front/user/user' );
             $this->load->model( 'user/user' );
-            $this->load->model( 'user' );
+            $this->model_user_user->callme();
 
-            $this->model_user->callme();
-
-
-            $r1 = $this->db->from( 'test' )
-                    ->order( 'id' )
-                    ->result();
             /*
+              $r1 = $this->db->from( 'test' )
+              ->order( 'id' )
+              ->result();
+
               $r2 = $this->db->select()
               ->from( 'test' )
               ->where( 'id = 1' )
@@ -47,14 +41,15 @@ namespace Front\Controller
 
               $r4 = $this->db->get( 'test' );
               $r5 = $this->db->get_where( 'test', 'id = 2' );
-             */
 
-            foreach ( $r1->rows_array() as $row )
-            {
-                echo '<pre>';
-                var_dump( $row );
-                echo '</pre>';
-            }
+
+              foreach ( $r1->rows_array() as $row )
+              {
+              echo '<pre>';
+              var_dump( $row );
+              echo '</pre>';
+              }
+             */
         }
 
         /**
