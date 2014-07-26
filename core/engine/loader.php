@@ -18,36 +18,34 @@ namespace Core\Engine
             $file = $this->_get_file( $model, 'model/' );
             $class = $this->_get_class( $model, 'model/' );
             $key = $this->_get_key( $model, 'model_' );
+            $modelClass = null;
 
             if ( file_exists( $file ) )
             {
                 $modelClass = new $class();
-                \Core\Engine\Registry::set( $key, $modelClass );
-                unset( $modelClass );
             }
             else
             {
                 trigger_error( 'Class: <b>' . $class . '</b> not found!', E_USER_NOTICE );
             }
+
+            \Core\Engine\Registry::set( $key, $modelClass );
+            unset( $modelClass );
         }
 
-        public function view( $view, $data = array() )
+        public function view( $view, $filename = null )
         {
-            $file = $this->_get_file( $view, 'view/' );
-            $key = $this->_get_key( $view, 'view_' );
+            $dir = $this->_get_directory( $view, 'view/' );
+            $filename = !is_null( $filename ) ? $filename . '.php' : $filename;
 
-            if ( file_exists( $file ) )
+            if ( file_exists( $dir . DIRECTORY_SEPARATOR . $filename ) )
             {
-                $viewClass = new \Core\Engine\View( array(
-                            'data' => $data,
-                            'filename' => $file
-                        ) );
-                \Core\Engine\Registry::set( $key, $viewClass );
-                unset( $viewClass );
+                Registry::get( 'view' )->set_dir( $dir );
+                Registry::get( 'view' )->set_filename( $filename );
             }
             else
             {
-                trigger_error( 'Class: <b>' . $class . '</b> not found!', E_USER_NOTICE );
+                trigger_error( 'View: <b>' . $dir . DIRECTORY_SEPARATOR . $filename . '</b> not found!', E_USER_NOTICE );
             }
         }
 
@@ -59,8 +57,8 @@ namespace Core\Engine
         public function addons( $name, $postfix = '' )
         {
             $file = 'addons' . DIRECTORY_SEPARATOR . strtolower( $name ) . DIRECTORY_SEPARATOR . ucfirst( $name ) . $postfix . 'php';
-        
-            var_dump($file);
+
+            var_dump( $file );
         }
 
         public function autoload( $class )
@@ -81,12 +79,18 @@ namespace Core\Engine
 
         private function _get_file( $pattern, $directory = '' )
         {
+            $dir = $this->_get_directory( $pattern, $directory );
+            $file = $dir . '.php';
+            return $file;
+        }
+
+        private function _get_directory( $pattern, $directory = '' )
+        {
             $curret_base = \Core\Engine\Registry::get( 'route' )->base;
             $pattern = preg_replace( '/(\w+\/)?(\w+)$/', $directory . '${1}${2}', $pattern );
             $matches = \Core\Helper\StringHelper::match( $pattern, '/(\/+)/' );
             $pattern = count( $matches ) < 3 ? $curret_base . '/' . $pattern : $pattern;
-            $file = $pattern . '.php';
-            return $file;
+            return $pattern;
         }
 
         private function _get_class( $pattern, $directory = '' )

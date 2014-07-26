@@ -24,7 +24,7 @@ namespace Core\Engine
             {
                 $class = '\\' . ucfirst( $this->_base ) . '\Controller\\' . ucfirst( $controller );
                 $instance = new $class( array(
-                    'parameters' => $parameters,
+                            'parameters' => $parameters,
                         ) );
                 \Core\Engine\Registry::set( 'controller', $instance );
             }
@@ -81,7 +81,7 @@ namespace Core\Engine
             {
                 $controller = $url[ 0 ];
 
-                if ( $url > 1 )
+                if ( count( $url ) > 1 )
                 {
                     $action = $url[ 1 ];
                     $parameters = array_splice( $url, 2 );
@@ -89,6 +89,22 @@ namespace Core\Engine
             }
 
             $this->_pass( $controller, $action, $parameters );
+        }
+
+        public function get_action()
+        {
+            $url = explode( '/', trim( $this->_url, '/' ) );
+            $action = 'index';
+            
+            if ( count( $url ) )
+            {
+                if ( count( $url ) > 1 )
+                {
+                    $action = $url[ 1 ];
+                }
+            }
+
+            return $action;
         }
 
     }

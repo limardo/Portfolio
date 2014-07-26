@@ -49,13 +49,18 @@ $router = new \Core\Engine\Router( array(
             'url' => isset( $_GET[ 'p' ] ) ? $_GET[ 'p' ] : 'home'
         ) );
 
+//View
+$view = new \Core\Engine\View();
+
 \Core\Engine\Registry::set( 'load', $loader );
 \Core\Engine\Registry::set( 'db', $database->connector );
 \Core\Engine\Registry::set( 'route', $router );
+\Core\Engine\Registry::set( 'view', $view );
 
 unset( $loader );
 unset( $database );
 unset( $router );
+unset( $view );
 
 // Init
 Core\Engine\Registry::get( "route" )->dispatch();

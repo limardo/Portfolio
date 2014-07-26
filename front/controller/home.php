@@ -6,19 +6,17 @@ namespace Front\Controller
     class home extends \Core\Engine\Controller
     {
 
+        function index()
+        {
+            var_dump( 'index' );
+        }
+
         /**
          * @once
-         * @private
          */
         public function login()
         {
             $this->load->model( 'user/user' );
-            $data = $this->model_user_user->all();
-
-            $this->load->view( 'user/user', $data );
-            $this->load->view( 'user', $data );
-
-            $this->view_user->javascript('js/jquery');
 
             /*
               $r1 = $this->db->from( 'test' )
@@ -64,7 +62,15 @@ namespace Front\Controller
          */
         public function test()
         {
-            var_dump( "test" );
+            $this->load->model( 'user/user' );
+            $this->load->view( 'user' );
+
+            $data = $this->model_user_user->all();
+
+            $this->view->css( 'css/bootstrap', true );
+            $this->view->javascript( 'js/jquery', true );
+            $this->view->javascript( 'js/bootstrap', true );
+            $this->view->render( array( 'users' => $data ) );
         }
 
     }
