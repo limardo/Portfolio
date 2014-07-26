@@ -1,6 +1,7 @@
 <?php
 
-namespace Front\Controller {
+namespace Front\Controller
+{
 
     class home extends \Core\Engine\Controller
     {
@@ -12,7 +13,12 @@ namespace Front\Controller {
         public function login()
         {
             $this->load->model( 'user/user' );
-            $this->model_user_user->callme();
+            $data = $this->model_user_user->all();
+
+            $this->load->view( 'user/user', $data );
+            $this->load->view( 'user', $data );
+
+            $this->view_user->javascript('js/jquery');
 
             /*
               $r1 = $this->db->from( 'test' )

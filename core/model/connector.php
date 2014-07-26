@@ -1,7 +1,6 @@
 <?php
 
-namespace Core\Model
-{
+namespace Core\Model {
 
 
 
@@ -50,6 +49,26 @@ namespace Core\Model
         public function is_connected()
         {
             return !empty( $this->_table ) && !empty( $this->_primary_field ) ? true : false;
+        }
+
+        public function free( $method = 'object' )
+        {
+            if ( $this->is_connected() )
+            {
+                $result = $this->_connection->get( $this->_table );
+                switch ( $method )
+                {
+                    case 'array':
+                        return $result->rows_array();
+                        break;
+                    case 'object':
+                    default:
+                        return $result->rows();
+                        break;
+                }
+            }
+
+            return false;
         }
 
         public function row( $index = null )

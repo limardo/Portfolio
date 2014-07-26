@@ -27,6 +27,11 @@ namespace Core\Database\Mysqli
          * @readwrite
          */
         protected $_schema;
+       
+        /**
+         * @readwrite
+         */
+        protected $_prefix;
 
         /**
          * @readwrite

@@ -146,7 +146,7 @@ namespace Core\Database\Mysqli
             if ( !empty( $this->_table ) )
             {
                 $field = $this->_field;
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
 
                 if ( !empty( $this->_where ) )
                 {
@@ -195,7 +195,7 @@ namespace Core\Database\Mysqli
 
             if ( !empty( $this->_table ) )
             {
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
 
                 if ( is_array( $this->_field ) )
                 {
@@ -232,7 +232,7 @@ namespace Core\Database\Mysqli
 
             if ( !empty( $this->_table ) )
             {
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
                 $set = $this->_field;
 
                 if ( !empty( $this->_where ) )
@@ -270,7 +270,7 @@ namespace Core\Database\Mysqli
 
             if ( !empty( $this->_table ) )
             {
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
 
                 if ( !empty( $this->_where ) )
                 {

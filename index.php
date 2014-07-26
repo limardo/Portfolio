@@ -37,6 +37,7 @@ $database = new \Core\Engine\Database( array(
                         'username' => DB_USERNAME,
                         'password' => DB_PASSWORD,
                         'schema' => DB_DATABASE,
+                        'prefix' => DB_PREFIX,
                         'port' => DB_PORT,
                         'charset' => DB_CHARSET
             )

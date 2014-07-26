@@ -19,10 +19,9 @@ namespace Front\Model\User {
          */
         public $text;
 
-        public function callme()
+        public function all()
         {
-            var_dump( $this->row( 1 )->text );
-            var_dump( 'user2' );
+            return $this->free( 'array' );
         }
 
     }

@@ -1,7 +1,6 @@
 <?php
 
-namespace Core\Engine
-{
+namespace Core\Engine {
 
     class Model
     {
@@ -31,6 +30,16 @@ namespace Core\Engine
         public function __get( $name )
         {
             return \Core\Engine\Registry::get( $name );
+        }
+
+        public function free( $method = 'object' )
+        {
+            if ( $this->_connector->is_connected() )
+            {
+                return $this->_connector->free( $method );
+            }
+
+            return null;
         }
 
         public function rows()
