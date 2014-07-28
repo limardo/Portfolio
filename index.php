@@ -25,6 +25,12 @@ else
 //Loader
 $loader = new \Core\Engine\Loader();
 $loader->initialize();
+\Core\Engine\Registry::set( 'load', $loader );
+
+//Log
+\Core\Engine\Registry::set( 'log', new \Core\Engine\Log( array(
+            'dirname' => 'core/logs/'
+) ) );
 
 //Error
 \Core\Engine\Error::initialize( true );
@@ -42,26 +48,23 @@ $database = new \Core\Engine\Database( array(
                         'charset' => DB_CHARSET
             )
         ) );
+\Core\Engine\Registry::set( 'db', $database->connector );
 
 //Router
 $router = new \Core\Engine\Router( array(
             'base' => 'front',
             'url' => isset( $_GET[ 'p' ] ) ? $_GET[ 'p' ] : 'home'
         ) );
+\Core\Engine\Registry::set( 'route', $router );
 
 //View
-$view = new \Core\Engine\View();
-
-\Core\Engine\Registry::set( 'load', $loader );
-\Core\Engine\Registry::set( 'db', $database->connector );
-\Core\Engine\Registry::set( 'route', $router );
-\Core\Engine\Registry::set( 'view', $view );
+\Core\Engine\Registry::set( 'view', new \Core\Engine\View() );
 
 unset( $loader );
 unset( $database );
 unset( $router );
-unset( $view );
 
 // Init
 Core\Engine\Registry::get( "route" )->dispatch();
+Core\Engine\Registry::get( "load" )->shutdown();
 ?>

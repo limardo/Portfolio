@@ -1,6 +1,6 @@
-<?php self::block( 'common/header' ); ?>
+<?php self::block( 'header' ); ?>
 <h1>Hello, world!</h1>
-<nav><?php self::block( 'common/menu' ); ?></nav>
+<nav><?php self::block( 'menu' ); ?></nav>
 <table border="1">
     <thead>
         <tr>
@@ -17,4 +17,4 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php self::block( 'common/footer' ); ?>
+<?php self::block( 'footer' ); ?>

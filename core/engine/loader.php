@@ -6,11 +6,26 @@ namespace Core\Engine
     class Loader
     {
 
+        private $_funcs = array();
+
         public function initialize()
         {
             spl_autoload_register( array( $this, 'autoload' ) );
             //\rename_function( 'var_dump', 'original_var_dump' );
             //override_function( 'var_dump', '$expression', 'return \Core\Engine\Loader::custom_var_dump($expression);' );
+        }
+
+        public function add_shutdown( $function )
+        {
+            array_push( $this->_funcs, $function );
+        }
+
+        public function shutdown()
+        {
+            foreach ( $this->_funcs as $func )
+            {
+                call_user_func( $func );
+            }
         }
 
         public function model( $model )
@@ -31,27 +46,6 @@ namespace Core\Engine
 
             \Core\Engine\Registry::set( $key, $modelClass );
             unset( $modelClass );
-        }
-
-        public function view( $view, $filename = null )
-        {
-            $dir = $this->_get_directory( $view, 'view/' );
-            $filename = !is_null( $filename ) ? $filename . '.php' : $filename;
-
-            if ( file_exists( $dir . DIRECTORY_SEPARATOR . $filename ) )
-            {
-                Registry::get( 'view' )->set_dir( $dir );
-                Registry::get( 'view' )->set_filename( $filename );
-            }
-            else
-            {
-                trigger_error( 'View: <b>' . $dir . DIRECTORY_SEPARATOR . $filename . '</b> not found!', E_USER_NOTICE );
-            }
-        }
-
-        public function template( $view )
-        {
-            
         }
 
         public function addons( $name, $postfix = '' )

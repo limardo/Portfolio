@@ -7,28 +7,16 @@ namespace Core\Engine
     {
 
         private static $_is_error = false;
-
         private static $_error_exit = false;
-
         private static $_error_output = null;
+        private static $_error_log = false;
 
         public static function initialize( $log = false )
         {
             set_error_handler( '\Core\Engine\Error::error_handler' );
             set_exception_handler( '\Core\Engine\Error::exception_handler' );
             register_shutdown_function( '\Core\Engine\Error::shutdown' );
-            if ( $log !== false )
-            {
-                if ( !ini_get( 'log_errors' ) )
-                {
-                    ini_set( 'log_errors', true );
-                }
-
-                if ( !ini_get( 'error_log' ) )
-                {
-                    ini_set( 'error_log', $log );
-                }
-            }
+            self::$_error_log = $log;
         }
 
         public static function error_handler( $errno, $errstr, $errfile, $errline, $errcontext )
@@ -62,10 +50,10 @@ namespace Core\Engine
                 }
 
                 $exception = array(
-                    'type' => $type,
-                    'text' => $errstr,
-                    'file' => $errfile,
-                    'line' => $errline
+                            'type' => $type,
+                            'text' => $errstr,
+                            'file' => $errfile,
+                            'line' => $errline
                 );
 
                 self::$_is_error = true;
@@ -84,10 +72,10 @@ namespace Core\Engine
             $template = "<table class='table_error_handler " . $class . "'><tr><td>Type</td><td>%s</td></tr><tr><td>Message</td><td>%s</td></tr><tr><td>File</td><td>%s</td></tr><tr><td>Line</td><td>%s</td></tr></table>";
             self::$_error_output .= sprintf( $template, $exception[ 'type' ], $exception[ 'text' ], $exception[ 'file' ], $exception[ 'line' ] );
 
-            if ( ini_get( 'log_errors' ) )
+            if ( self::$_error_log )
             {
-                $log = $exception[ 'type' ] . ": " . $exception[ 'text' ] . "\n" . $exception[ 'file' ] . "(" . $exception[ 'line' ] . ")" . "\r\n";
-                error_log( $log, 0 );
+                $log = $exception[ 'type' ] . ": " . $exception[ 'text' ] . " - " . $exception[ 'file' ] . "(" . $exception[ 'line' ] . ")";
+                \Core\Engine\Registry::get( 'log' )->system( $log );
             }
         }
 

@@ -63,14 +63,20 @@ namespace Front\Controller
         public function test()
         {
             $this->load->model( 'user/user' );
-            $this->load->view( 'user' );
+
 
             $data = $this->model_user_user->all();
 
-            $this->view->css( 'css/bootstrap', true );
-            $this->view->javascript( 'js/jquery', true );
-            $this->view->javascript( 'js/bootstrap', true );
-            $this->view->render( array( 'users' => $data ) );
+            $this->view->template( 'user' );
+            $this->view->css( 'bootstrap' );
+            $this->view->javascript( 'jquery' );
+            $this->view->javascript( 'bootstrap' );
+            $this->view->bind( array( 'users' => $data ) );
+        }
+
+        public function block_menu()
+        {
+            return array( 'users' => $this->model_user_user->all() );
         }
 
     }

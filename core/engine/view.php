@@ -3,8 +3,13 @@
 namespace Core\Engine
 {
 
-    class View extends Base
+    class View
     {
+
+        /**
+         * @readwrite
+         */
+        protected static $_data;
 
         /**
          * @readwrite
@@ -28,44 +33,13 @@ namespace Core\Engine
 
         public function __construct()
         {
-            parent::__construct();
-
-            self::$_head = new \DOMDocument();
-            self::$_foot = new \DOMDocument();
+            $this->_init();
+            \Core\Engine\Registry::get( 'load' )->add_shutdown( array( $this, 'render' ) );
         }
 
-        public function set_dir( $dir )
+        public function bind( $data = array() )
         {
-            self::$_dir = $dir;
-        }
-
-        public function set_filename( $filename = null )
-        {
-            if ( is_null( $filename ) )
-            {
-                self::$_filename = '/index.php';
-                $action = Registry::get( 'route' )->get_action();
-                if ( file_exists( self::$_dir . DIRECTORY_SEPARATOR . $action . '.php' ) )
-                {
-                    self::$_filename = DIRECTORY_SEPARATOR . $action . '.php';
-                }
-            }
-            else
-            {
-                self::$_filename = $filename;
-            }
-        }
-
-        private static function _get_path( $name, $extension = 'php' )
-        {
-            if ( count( explode( '/', $name ) ) > 1 )
-            {
-                return preg_replace( '/(\/\w+)$/', DIRECTORY_SEPARATOR . $name . '.' . $extension, self::$_dir );
-            }
-            else
-            {
-                return self::$_dir . DIRECTORY_SEPARATOR . $name . '.' . $extension;
-            }
+            self::$_data = array_merge( self::$_data, $data );
         }
 
         public function css( $path )
@@ -94,21 +68,67 @@ namespace Core\Engine
             echo self::$_foot->saveHTML();
         }
 
-        public static function block( $name, $data = array() )
+        public static function block( $name )
         {
-            $file = self::_get_path( $name );
+            $file = self::$_dir . 'block' . DIRECTORY_SEPARATOR . $name . '.php';
+            $func = 'block_' . strtolower( $name );
+            $data = array();
+
+            if ( method_exists( \Core\Engine\Registry::get( 'controller' ), $func ) )
+            {
+                $data = \Core\Engine\Registry::get( 'controller' )->$func();
+            }
+
             ob_start();
             extract( $data );
             require_once $file;
             ob_end_flush();
         }
 
-        public function render( $data = array() )
+        public function template( $template )
+        {
+            $this->_set_filename( $template );
+        }
+
+        public function render()
         {
             ob_start();
-            extract( $data );
+            extract( self::$_data );
             require_once self::$_dir . self::$_filename;
             ob_end_flush();
+
+            $this->_init();
+        }
+
+        private function _init()
+        {
+            $this->_set_filename();
+            self::$_dir = \Core\Engine\Registry::get( 'route' )->base . '/view/';
+            self::$_head = new \DOMDocument();
+            self::$_foot = new \DOMDocument();
+            self::$_data = array();
+        }
+
+        private function _set_filename( $filename = null )
+        {
+            self::$_filename = 'index.php';
+
+            if ( !is_null( $filename ) && !empty( $filename ) && is_string( $filename ) )
+            {
+                self::$_filename = $filename . '.php';
+            }
+        }
+
+        private static function _get_path( $name, $extension = 'php' )
+        {
+            if ( count( explode( '/', $name ) ) > 1 )
+            {
+                return preg_replace( '/(\/\w+)$/', DIRECTORY_SEPARATOR . $name . '.' . $extension, self::$_dir );
+            }
+            else
+            {
+                return self::$_dir . DIRECTORY_SEPARATOR . $name . '.' . $extension;
+            }
         }
 
     }
