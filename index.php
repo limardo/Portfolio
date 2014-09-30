@@ -60,7 +60,6 @@ $router = new \Core\Engine\Router( array(
 unset( $loader );
 unset( $database );
 unset( $router );
-var_dump($_GET);
 // Init
 Core\Engine\Registry::get( "route" )->dispatch();
 ?>
