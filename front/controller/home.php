@@ -60,18 +60,25 @@ namespace Front\Controller
          * @before login
          * @after login
          */
-        public function test()
+        public function test( $m = null )
         {
             $this->load->model( 'user/user' );
 
 
             $data = $this->model_user_user->all();
 
-            $this->view->template( 'user' );
-            $this->view->css( 'bootstrap' );
-            $this->view->javascript( 'jquery' );
-            $this->view->javascript( 'bootstrap' );
-            $this->view->bind( array( 'users' => $data ) );
+            $this->view->template( 'mario' );
+
+            var_dump( $m );
+
+            /*
+              $this->view->template( 'user' );
+              $this->view->css( 'bootstrap' );
+              $this->view->javascript( 'jquery' );
+              $this->view->javascript( 'bootstrap' );
+              $this->view->bind( array( 'users' => $data ) );
+             * 
+             */
         }
 
         public function block_menu()

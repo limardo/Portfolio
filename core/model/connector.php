@@ -114,7 +114,7 @@ namespace Core\Model {
             $meta = $this->_inspector->get_class_meta();
             if ( !empty( $meta[ '@table' ] ) )
             {
-                $this->_table = $meta[ '@table' ];
+                $this->_table = $meta[ '@table' ][0];
                 return $this;
             }
 

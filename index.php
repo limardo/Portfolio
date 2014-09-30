@@ -52,19 +52,15 @@ $database = new \Core\Engine\Database( array(
 
 //Router
 $router = new \Core\Engine\Router( array(
-            'base' => 'front',
-            'url' => isset( $_GET[ 'p' ] ) ? $_GET[ 'p' ] : 'home'
+            'base' => isset( $_GET['base'] ) ? $_GET['base'] : BASE_DEFAULT,
+            'url' => isset( $_GET['url'] ) ? $_GET['url'] : PAGE_DEFAULT
         ) );
 \Core\Engine\Registry::set( 'route', $router );
-
-//View
-\Core\Engine\Registry::set( 'view', new \Core\Engine\View() );
 
 unset( $loader );
 unset( $database );
 unset( $router );
-
+var_dump($_GET);
 // Init
 Core\Engine\Registry::get( "route" )->dispatch();
-Core\Engine\Registry::get( "load" )->shutdown();
 ?>
