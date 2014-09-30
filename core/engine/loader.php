@@ -51,6 +51,7 @@ namespace Core\Engine
         public function addons( $name, $postfix = '' )
         {
             $file = 'addons' . DIRECTORY_SEPARATOR . strtolower( $name ) . DIRECTORY_SEPARATOR . ucfirst( $name ) . $postfix . 'php';
+
             var_dump( $file );
         }
 

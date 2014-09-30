@@ -100,7 +100,7 @@ namespace Core\Database\Mysqli
             {
                 foreach ( $value as $i => $val )
                 {
-                    $value[$i] = $this->_quote( $val, $delimiter );
+                    $value[ $i ] = $this->_quote( $val, $delimiter );
                 }
 
                 return implode( ', ', $value );
@@ -146,7 +146,7 @@ namespace Core\Database\Mysqli
             if ( !empty( $this->_table ) )
             {
                 $field = $this->_field;
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
 
                 if ( !empty( $this->_where ) )
                 {
@@ -195,7 +195,7 @@ namespace Core\Database\Mysqli
 
             if ( !empty( $this->_table ) )
             {
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
 
                 if ( is_array( $this->_field ) )
                 {
@@ -232,7 +232,7 @@ namespace Core\Database\Mysqli
 
             if ( !empty( $this->_table ) )
             {
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
                 $set = $this->_field;
 
                 if ( !empty( $this->_where ) )
@@ -270,7 +270,7 @@ namespace Core\Database\Mysqli
 
             if ( !empty( $this->_table ) )
             {
-                $table = $this->_table;
+                $table = $this->_connector->_prefix . $this->_table;
 
                 if ( !empty( $this->_where ) )
                 {
@@ -326,7 +326,7 @@ namespace Core\Database\Mysqli
 
         protected function _from( $table )
         {
-            $this->_table = $this->_quote_service( $this->_connector->prefix . $table );
+            $this->_table = $this->_quote_service( $table );
             return $this;
         }
 

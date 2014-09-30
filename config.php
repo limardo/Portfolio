@@ -1,9 +1,6 @@
 <?php
-
-//Base
-define( 'APP_PATH', dirname( __FILE__ ) );
-define( 'BASE_DEFAULT', 'front' );
-define( 'PAGE_DEFAULT', 'home' );
+//Basepath
+define( "APP_PATH", dirname( __FILE__ ) );
 
 // MySql
 define( 'DB_DRIVER', 'mysqli' );
