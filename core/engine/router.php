@@ -41,7 +41,7 @@ namespace Core\Engine
             $inspector = new \Core\Engine\Inspector( $instance );
             $methodMeta = $inspector->get_method_meta( $action );
 
-            if ( !empty( $methodMeta[ '@protected' ] ) || !empty( $methodMeta[ '@private' ] ) )
+            if ( !empty( $methodMeta['@protected'] ) || !empty( $methodMeta['@private'] ) )
             {
                 trigger_error( "Action <b>{$action}</b> is protected or private!", E_USER_ERROR );
             }
@@ -49,12 +49,12 @@ namespace Core\Engine
             $run = array();
             $hooks = function($meta, $type) use ($inspector, $instance, &$run)
             {
-                if ( isset( $meta[ $type ] ) )
+                if ( isset( $meta[$type] ) )
                 {
-                    foreach ( $meta[ $type ] as $method )
+                    foreach ( $meta[$type] as $method )
                     {
                         $hookMeta = $inspector->get_method_meta( $method );
-                        if ( in_array( $method, $run ) && !empty( $hookMeta[ '@once' ] ) )
+                        if ( in_array( $method, $run ) && !empty( $hookMeta['@once'] ) )
                         {
                             continue;
                         }
@@ -79,11 +79,11 @@ namespace Core\Engine
 
             if ( count( $url ) )
             {
-                $controller = $url[ 0 ];
+                $controller = $url[0];
 
                 if ( count( $url ) > 1 )
                 {
-                    $action = $url[ 1 ];
+                    $action = $url[1];
                     $parameters = array_splice( $url, 2 );
                 }
             }
@@ -95,12 +95,12 @@ namespace Core\Engine
         {
             $url = explode( '/', trim( $this->_url, '/' ) );
             $action = 'index';
-            
+
             if ( count( $url ) )
             {
                 if ( count( $url ) > 1 )
                 {
-                    $action = $url[ 1 ];
+                    $action = $url[1];
                 }
             }
 
