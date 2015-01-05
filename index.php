@@ -2,7 +2,7 @@
 
 error_reporting( E_ALL );
 
-define( 'VERSION', '0.0.2' );
+define( 'VERSION', '0.0.1' );
 
 if ( file_exists( 'config.php' ) )
 {
