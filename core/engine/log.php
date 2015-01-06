@@ -24,53 +24,44 @@
  * THE SOFTWARE.
  */
 
-error_reporting( E_ALL );
-
-define( 'VERSION', '0.0.2' );
-define( 'APP_PATH', dirname( __FILE__ ) );
-
-if ( file_exists( 'core/bootstrap.php' ) )
+namespace Core\Engine
 {
-    require('core/bootstrap.php');
+
+    /**
+     * Class Log
+     *
+     * @author Luca Limardo
+     */
+    class Log
+    {
+
+        private $_dirname = 'core/logs/';
+
+        public function system( $message )
+        {
+            $filename = $this->_dirname . 'php_error.log';
+            $message = \Core\Helper\DateHelper::now( 'r', '[', '] ' ) . $message . PHP_EOL;
+            $this->_write( $filename, $message );
+        }
+
+        public function get_dirname()
+        {
+            return $this->_dirname;
+        }
+
+        public function set_dirname( $dirname )
+        {
+            $this->_dirname = $dirname;
+        }
+
+        private function _write( $filename, $message )
+        {
+            if ( is_writable( $filename ) )
+            {
+                file_put_contents( $filename, $message, FILE_APPEND | LOCK_EX );
+            }
+        }
+
+    }
+
 }
-else
-{
-    die( "File bootstrap.php is not found!" );
-}
-
-/**
- * Loader
- */
-$loader = new \Core\Engine\Loader();
-\Core\Engine\Registry::set( 'load', $loader );
-
-/**
- * Log
- */
-$log = new \Core\Engine\Log();
-\Core\Engine\Registry::set( 'log', $log );
-
-/**
- * Error
- */
-$error = \Core\Engine\Error::initialize( true );
-\Core\Engine\Registry::set( 'error', $error );
-
-/**
- * Ruoter
- */
-$router = new \Core\Engine\Router();
-\Core\Engine\Registry::set( 'router', $router );
-
-/**
- * Unset all
- */
-unset( $loader );
-unset( $log );
-unset( $error );
-unset( $router );
-
-/**
- * Init
- */
-\Core\Engine\Registry::get( 'router' )->dispatch();

@@ -24,53 +24,39 @@
  * THE SOFTWARE.
  */
 
-error_reporting( E_ALL );
-
-define( 'VERSION', '0.0.2' );
-define( 'APP_PATH', dirname( __FILE__ ) );
-
-if ( file_exists( 'core/bootstrap.php' ) )
+namespace Core\Engine;
 {
-    require('core/bootstrap.php');
+
+    /**
+     * Class Loader
+     *
+     * @author Luca Limardo
+     */
+    class Loader
+    {
+
+        public function __construct()
+        {
+            spl_autoload_register( array( $this, 'autoload' ) );
+            return $this;
+        }
+
+        public function autoload( $class )
+        {
+            if ( defined( 'APP_PATH' ) )
+            {
+                $file = strtolower( str_replace( '\\', DIRECTORY_SEPARATOR, trim( $class, ' \\' ) ) ) . '.php';
+                $combined = APP_PATH . DIRECTORY_SEPARATOR . $file;
+                if ( file_exists( $combined ) )
+                {
+                    include( $combined );
+                    return;
+                }
+            }
+
+            trigger_error( 'Class: <b>' . $class . '</b> not found!', E_USER_ERROR );
+        }
+
+    }
+
 }
-else
-{
-    die( "File bootstrap.php is not found!" );
-}
-
-/**
- * Loader
- */
-$loader = new \Core\Engine\Loader();
-\Core\Engine\Registry::set( 'load', $loader );
-
-/**
- * Log
- */
-$log = new \Core\Engine\Log();
-\Core\Engine\Registry::set( 'log', $log );
-
-/**
- * Error
- */
-$error = \Core\Engine\Error::initialize( true );
-\Core\Engine\Registry::set( 'error', $error );
-
-/**
- * Ruoter
- */
-$router = new \Core\Engine\Router();
-\Core\Engine\Registry::set( 'router', $router );
-
-/**
- * Unset all
- */
-unset( $loader );
-unset( $log );
-unset( $error );
-unset( $router );
-
-/**
- * Init
- */
-\Core\Engine\Registry::get( 'router' )->dispatch();

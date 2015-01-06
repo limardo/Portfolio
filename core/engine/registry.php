@@ -24,53 +24,29 @@
  * THE SOFTWARE.
  */
 
-error_reporting( E_ALL );
-
-define( 'VERSION', '0.0.2' );
-define( 'APP_PATH', dirname( __FILE__ ) );
-
-if ( file_exists( 'core/bootstrap.php' ) )
+namespace Core\Engine;
 {
-    require('core/bootstrap.php');
+
+    /**
+     * class Registry
+     *
+     * @author Luca Limardo
+     */
+    class Registry
+    {
+
+        private static $_data = array();
+
+        public static function get( $key )
+        {
+            return isset( self::$_data[ $key ] ) ? self::$_data[ $key ] : null;
+        }
+
+        public static function set( $key, $value )
+        {
+            self::$_data[ $key ] = $value;
+        }
+
+    }
+
 }
-else
-{
-    die( "File bootstrap.php is not found!" );
-}
-
-/**
- * Loader
- */
-$loader = new \Core\Engine\Loader();
-\Core\Engine\Registry::set( 'load', $loader );
-
-/**
- * Log
- */
-$log = new \Core\Engine\Log();
-\Core\Engine\Registry::set( 'log', $log );
-
-/**
- * Error
- */
-$error = \Core\Engine\Error::initialize( true );
-\Core\Engine\Registry::set( 'error', $error );
-
-/**
- * Ruoter
- */
-$router = new \Core\Engine\Router();
-\Core\Engine\Registry::set( 'router', $router );
-
-/**
- * Unset all
- */
-unset( $loader );
-unset( $log );
-unset( $error );
-unset( $router );
-
-/**
- * Init
- */
-\Core\Engine\Registry::get( 'router' )->dispatch();

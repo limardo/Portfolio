@@ -24,53 +24,41 @@
  * THE SOFTWARE.
  */
 
-error_reporting( E_ALL );
-
-define( 'VERSION', '0.0.2' );
-define( 'APP_PATH', dirname( __FILE__ ) );
-
-if ( file_exists( 'core/bootstrap.php' ) )
+namespace Portfolio
 {
-    require('core/bootstrap.php');
+
+    /**
+     * Portfolio Controller
+     *
+     * @author Luca Limardo
+     */
+    class Controller extends \Core\Engine\Controller
+    {
+
+        /**
+         * @type json
+         * @template auth,success
+         * @before success,auth
+         * @after success,auth
+         */
+        public function index()
+        {
+            var_dump( 'Index' );
+        }
+
+        /**
+         * @once
+         */
+        public function auth()
+        {
+            var_dump( 'Auth' );
+        }
+
+        public function success()
+        {
+            var_dump( 'Success' );
+        }
+
+    }
+
 }
-else
-{
-    die( "File bootstrap.php is not found!" );
-}
-
-/**
- * Loader
- */
-$loader = new \Core\Engine\Loader();
-\Core\Engine\Registry::set( 'load', $loader );
-
-/**
- * Log
- */
-$log = new \Core\Engine\Log();
-\Core\Engine\Registry::set( 'log', $log );
-
-/**
- * Error
- */
-$error = \Core\Engine\Error::initialize( true );
-\Core\Engine\Registry::set( 'error', $error );
-
-/**
- * Ruoter
- */
-$router = new \Core\Engine\Router();
-\Core\Engine\Registry::set( 'router', $router );
-
-/**
- * Unset all
- */
-unset( $loader );
-unset( $log );
-unset( $error );
-unset( $router );
-
-/**
- * Init
- */
-\Core\Engine\Registry::get( 'router' )->dispatch();

@@ -24,53 +24,16 @@
  * THE SOFTWARE.
  */
 
-error_reporting( E_ALL );
+//Router
+define( 'DEFAULT_CONTROLLER', 'portfolio' );
 
-define( 'VERSION', '0.0.2' );
-define( 'APP_PATH', dirname( __FILE__ ) );
-
-if ( file_exists( 'core/bootstrap.php' ) )
-{
-    require('core/bootstrap.php');
-}
-else
-{
-    die( "File bootstrap.php is not found!" );
-}
-
-/**
- * Loader
- */
-$loader = new \Core\Engine\Loader();
-\Core\Engine\Registry::set( 'load', $loader );
-
-/**
- * Log
- */
-$log = new \Core\Engine\Log();
-\Core\Engine\Registry::set( 'log', $log );
-
-/**
- * Error
- */
-$error = \Core\Engine\Error::initialize( true );
-\Core\Engine\Registry::set( 'error', $error );
-
-/**
- * Ruoter
- */
-$router = new \Core\Engine\Router();
-\Core\Engine\Registry::set( 'router', $router );
-
-/**
- * Unset all
- */
-unset( $loader );
-unset( $log );
-unset( $error );
-unset( $router );
-
-/**
- * Init
- */
-\Core\Engine\Registry::get( 'router' )->dispatch();
+// MySql
+define( 'DB_DRIVER', 'mysqli' );
+define( 'DB_HOSTNAME', 'localhost' );
+define( 'DB_USERNAME', 'portfolio' );
+define( 'DB_PASSWORD', 'portfolio' );
+define( 'DB_DATABASE', 'portfolio' );
+define( 'DB_PREFIX', '' );
+define( 'DB_PORT', '3306' );
+define( 'DB_CHARSET', 'utf8' );
+?>
