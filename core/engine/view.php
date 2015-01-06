@@ -39,6 +39,27 @@ namespace Core\Engine
         protected $_content_type = 'text/html';
         protected $_template;
         protected $_extension = '.html';
+        private $_data = array();
+
+        public function set_data( $data )
+        {
+            if ( is_array( $data ) || is_object( $data ) )
+            {
+                foreach ( $data as $k => $v )
+                {
+                    $this->_data[ $k ] = $v;
+                }
+            }
+            else if ( is_string( $data ) || is_numeric( $data ) )
+            {
+                $this->_data[ 'data' ] = $data;
+            }
+        }
+
+        public function get_data()
+        {
+            return $this->_data;
+        }
 
         public function render()
         {
@@ -46,6 +67,8 @@ namespace Core\Engine
 
             if ( file_exists( $filename ) )
             {
+                extract( $this->_data );
+
                 ob_start();
                 require_once $filename;
                 $output = ob_get_contents();
@@ -74,9 +97,6 @@ namespace Core\Engine
         {
             switch ( $this->content_type )
             {
-                case 'plain':
-                    $this->content_type = 'text/plain';
-                    break;
                 case 'js':
                     $this->content_type = 'application/javascript';
                     break;
@@ -91,6 +111,9 @@ namespace Core\Engine
                     break;
                 case 'html':
                     $this->content_type = 'text/html';
+                    break;
+                case 'plain':
+                    $this->content_type = 'text/plain';
                     break;
             }
         }

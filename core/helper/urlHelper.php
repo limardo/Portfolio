@@ -24,38 +24,42 @@
  * THE SOFTWARE.
  */
 
-namespace Portfolio
+namespace Core\Helper;
 {
 
     /**
-     * Portfolio Controller
+     * Class UrlHelper
      *
      * @author Luca Limardo
      */
-    class Controller extends \Core\Engine\Controller
+    class UrlHelper
     {
 
-        /**
-         * @content_type html
-         * @template auth
-         * @before success,auth
-         * @after success,auth
-         */
-        public function index()
+        public static function root()
         {
-            $this->data['var'] = 1;
+            $current = self::server();
+            $current .= current( StringHelper::split( $_SERVER[ "REQUEST_URI" ], 'index.php' ) );
+            return $current;
         }
 
-        /**
-         * @once
-         */
-        public function auth()
+        public static function current()
         {
+            $current = self::server();
+            $current .= $_SERVER[ "REQUEST_URI" ];
+            return $current;
         }
 
-        public function success()
+        public static function server()
         {
-            //var_dump( 'Success' );
+            $current = @$_SERVER[ "HTTPS" ] == "on" ? "https://" : "http://";
+            $current .= $_SERVER[ "SERVER_NAME" ];
+
+            if ( $_SERVER[ "SERVER_PORT" ] != "80" && $_SERVER[ "SERVER_PORT" ] != "443" )
+            {
+                $current .= ":" . $_SERVER[ "SERVER_PORT" ];
+            }
+
+            return $current;
         }
 
     }

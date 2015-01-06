@@ -23,6 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 <div>
-    <link rel="stylesheet" href="<?php echo 'core' . DIRECTORY_SEPARATOR . 'error' . DIRECTORY_SEPARATOR . 'style.css'; ?>">
+    <link rel="stylesheet" href="<?php echo Core\Helper\UrlHelper::root() . 'core' . DIRECTORY_SEPARATOR . 'error' . DIRECTORY_SEPARATOR . 'style.css'; ?>">
     <?php echo self::$_error_output; ?>
 </div>

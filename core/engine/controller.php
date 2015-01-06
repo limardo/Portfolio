@@ -32,14 +32,53 @@ namespace Core\Engine;
      *
      * @author Luca Limardo
      */
-    class Controller extends Base
+    class Controller
     {
 
+        public $data;
         protected $_view;
 
         public function __construct()
         {
+            $this->data = array();
+
+            $model = str_replace( 'Controller', 'Model', get_called_class() );
+            if ( class_exists( $model ) )
+            {
+                $this->model = new $model();
+            }
+
             $this->view = new \Core\Engine\View();
+
+            $template = is_null( Registry::get( 'router' )->get_action() ) ? 'index' : Registry::get( 'router' )->get_action();
+            $dirname = is_null( Registry::get( 'router' )->get_controller() ) ? DEFAULT_CONTROLLER : Registry::get( 'router' )->get_controller();
+
+            $inspector = new \Core\Engine\Inspector( $this );
+            $methodMeta = $inspector->get_method_meta( $template );
+
+            $view_default = array(
+                        'content_type' => 'html',
+                        'template'     => $template,
+                        'dirname'      => $dirname,
+                        'extension'    => '.html'
+            );
+
+            $view_parse = function( $meta ) use ( $view_default )
+            {
+                foreach ( $view_default as $var => $default )
+                {
+                    $value = $default;
+
+                    if ( !empty( $meta[ '@' . $var ] ) )
+                    {
+                        $value = current( $meta[ '@' . $var ] );
+                    }
+
+                    $this->view->$var = $value;
+                }
+            };
+
+            $view_parse( $methodMeta );
         }
 
         public function __get( $name )

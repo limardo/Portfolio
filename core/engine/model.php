@@ -24,38 +24,20 @@
  * THE SOFTWARE.
  */
 
-namespace Portfolio
+namespace Core\Engine;
 {
 
     /**
-     * Portfolio Controller
+     * Class Model
      *
      * @author Luca Limardo
      */
-    class Controller extends \Core\Engine\Controller
+    class Model extends Base
     {
 
-        /**
-         * @content_type html
-         * @template auth
-         * @before success,auth
-         * @after success,auth
-         */
-        public function index()
+        public function __clone()
         {
-            $this->data['var'] = 1;
-        }
-
-        /**
-         * @once
-         */
-        public function auth()
-        {
-        }
-
-        public function success()
-        {
-            //var_dump( 'Success' );
+            
         }
 
     }
