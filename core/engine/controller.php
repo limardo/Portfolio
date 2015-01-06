@@ -32,8 +32,10 @@ namespace Core\Engine;
      *
      * @author Luca Limardo
      */
-    class Controller
+    class Controller extends Base
     {
+
+        protected $_view;
 
         public function __construct()
         {

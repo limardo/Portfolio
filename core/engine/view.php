@@ -32,12 +32,67 @@ namespace Core\Engine
      *
      * @author Luca Limardo
      */
-    class View
+    class View extends Base
     {
+
+        protected $_dirname;
+        protected $_content_type = 'text/html';
+        protected $_template;
+        protected $_extension = '.html';
 
         public function render()
         {
-            var_dump( 'render' );
+            $filename = $this->_get_file();
+
+            if ( file_exists( $filename ) )
+            {
+                ob_start();
+                require_once $filename;
+                $output = ob_get_contents();
+                ob_end_clean();
+
+                $this->_set_content_type();
+
+                header( 'Content-Type: ' . $this->content_type );
+                echo $output;
+            }
+            else
+            {
+                trigger_error( 'View: <b>' . $this->template . '</b> not found!', E_USER_NOTICE );
+            }
+        }
+
+        private function _get_file()
+        {
+            $this->extension = preg_replace( '/^(\.)/', '', $this->extension );
+            return APP_PATH . DIRECTORY_SEPARATOR
+                    . strtolower( $this->dirname ) . DIRECTORY_SEPARATOR
+                    . strtolower( $this->template ) . '.' . strtolower( $this->extension );
+        }
+
+        private function _set_content_type()
+        {
+            switch ( $this->content_type )
+            {
+                case 'plain':
+                    $this->content_type = 'text/plain';
+                    break;
+                case 'js':
+                    $this->content_type = 'application/javascript';
+                    break;
+                case 'css':
+                    $this->content_type = 'text/css';
+                    break;
+                case 'xml':
+                    $this->content_type = 'application/xml';
+                    break;
+                case 'json':
+                    $this->content_type = 'application/json';
+                    break;
+                case 'html':
+                    $this->content_type = 'text/html';
+                    break;
+            }
         }
 
     }

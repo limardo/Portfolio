@@ -36,14 +36,14 @@ namespace Portfolio
     {
 
         /**
-         * @type json
-         * @template auth,success
+         * @content_type html
+         * @template auth
          * @before success,auth
          * @after success,auth
          */
         public function index()
         {
-            var_dump( 'Index' );
+            //var_dump( 'Index' );
         }
 
         /**
@@ -51,12 +51,12 @@ namespace Portfolio
          */
         public function auth()
         {
-            var_dump( 'Auth' );
+            //var_dump( 'Auth' );
         }
 
         public function success()
         {
-            var_dump( 'Success' );
+            //var_dump( 'Success' );
         }
 
     }

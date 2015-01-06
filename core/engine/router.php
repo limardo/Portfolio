@@ -138,16 +138,29 @@ namespace Core\Engine;
             call_user_func_array( array( $instance, $action ), $parameters );
             $hooks( $methodMeta, '@after' );
 
-            if ( !empty( $methodMeta[ '@type' ] ) )
-            {
-                var_dump( $methodMeta[ '@type' ] );
-            }
+            $view_default = array(
+                        'content_type' => 'html',
+                        'template'     => $action,
+                        'dirname'      => strtolower( $controller ),
+                        'extension'    => '.html'
+            );
 
-            if ( !empty( $methodMeta[ '@template' ] ) )
+            $view_parse = function($meta)use($instance, $view_default)
             {
-                var_dump( $methodMeta[ '@template' ] );
-            }
+                foreach ( $view_default as $var => $default )
+                {
+                    $value = $default;
 
+                    if ( !empty( $meta[ '@' . $var ] ) )
+                    {
+                        $value = current( $meta[ '@' . $var ] );
+                    }
+
+                    $instance->view->$var = $value;
+                }
+            };
+
+            $view_parse( $methodMeta );
             $instance->view->render();
         }
 

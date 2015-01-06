@@ -45,7 +45,6 @@ namespace Core\Helper
             $flags = PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE;
             return preg_split( self::normalize( $pattern ), $string, $limit, $flags );
         }
-
     }
 
 }

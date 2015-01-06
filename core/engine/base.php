@@ -28,37 +28,52 @@ namespace Core\Engine
 {
 
     /**
-     * Class Log
+     * Class of Base
      *
      * @author Luca Limardo
      */
-    class Log extends Base
+    class Base
     {
 
-        protected $_dirname = 'core/logs/';
+        private $_inspector;
 
-        public function system( $message )
+        public function __construct( $options = array() )
         {
-            $filename = $this->dirname . 'php_error.log';
-            $message = \Core\Helper\DateHelper::now( 'r', '[', '] ' ) . $message . PHP_EOL;
-            $this->_write( $filename, $message );
-        }
+            $this->_inspector = new \Core\Engine\Inspector( $this );
 
-        public function get_dirname()
-        {
-            return $this->dirname;
-        }
-
-        public function set_dirname( $dirname )
-        {
-            $this->dirname = $dirname;
-        }
-
-        private function _write( $filename, $message )
-        {
-            if ( is_writable( $filename ) )
+            if ( is_array( $options ) || is_object( $options ) )
             {
-                file_put_contents( $filename, $message, FILE_APPEND | LOCK_EX );
+                foreach ( $options as $key => $value )
+                {
+                    $this->$key = $value;
+                }
+            }
+        }
+
+        public function __call( $name, $arguments )
+        {
+            unset( $arguments );
+            trigger_error( "<b>{$name}</b> method doesn't exists!", E_USER_NOTICE );
+        }
+
+        public function __get( $name )
+        {
+            $var = '_' . $name;
+            if ( property_exists( $this, $var ) && !$this->_inspector->is_property_private( $var ) )
+            {
+                if ( isset( $this->$var ) )
+                {
+                    return $this->$var;
+                }
+            }
+        }
+
+        public function __set( $name, $value )
+        {
+            $var = '_' . $name;
+            if ( property_exists( $this, $var ) && !$this->_inspector->is_property_private( $var ) )
+            {
+                $this->$var = $value;
             }
         }
 

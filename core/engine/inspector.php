@@ -224,6 +224,24 @@ namespace Core\Engine;
             return $this->_meta[ 'methods' ][ $method ];
         }
 
+        public function is_property_public( $property )
+        {
+            $prop = new \ReflectionProperty( get_class( $this->_class ), $property );
+            return $prop->isPublic();
+        }
+
+        public function is_property_private( $property )
+        {
+            $prop = new \ReflectionProperty( get_class( $this->_class ), $property );
+            return $prop->isPrivate();
+        }
+
+        public function is_property_protected( $property )
+        {
+            $prop = new \ReflectionProperty( get_class( $this->_class ), $property );
+            return $prop->isProtected();
+        }
+
     }
 
 }
