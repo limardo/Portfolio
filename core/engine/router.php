@@ -138,7 +138,7 @@ namespace Core\Engine;
             call_user_func_array( array( $instance, $action ), $parameters );
             $hooks( $methodMeta, '@after' );
 
-            $instance->view->set_data( $instance->data );
+            $instance->view->set_data( $instance->get_data() );
             $instance->view->render();
         }
 

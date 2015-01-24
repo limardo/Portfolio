@@ -24,63 +24,33 @@
  * THE SOFTWARE.
  */
 
-namespace Portfolio
+namespace Core\Engine
 {
 
     /**
-     * Portfolio Controller
+     * Class Database
      *
      * @author Luca Limardo
      */
-    class Controller extends \Core\Engine\Controller
+    class Database extends Base
     {
 
-        /**
-         * @content_type html
-         * @template auth
-         * @dirname portfolio
-         * @extension html
-         * @before success,auth
-         * @after success,auth
-         */
-        public function index()
+        protected $_driver;
+        protected $_parameters;
+
+        public function __construct( $options = array() )
         {
-            //$this->load->model( 'portfolio' );
+            parent::__construct( $options );
 
-            $person1 = array(
-                        'firstname' => 'Luca',
-                        'lastname'  => 'Limardo'
-            );
-
-            $person2 = new \stdClass();
-            $person2->firstname = 'Marco';
-            $person2->lastname = 'Donna';
-
-            $p1 = new \Portfolio( $person1 );
-            $p2 = new \Portfolio( $person2 );
-            $p3 = new \Portfolio();
-
-            $p3->firstname = 'Valerio';
-            $p3->lastname = 'Grotta';
-/*
-            var_dump( $p1 );
-            $p1->update( array( 'id' => 100 ) )->delete();
-            var_dump( $p1 );
-*/
-            $this->set_data( 'var', 2 );
+            $driver = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Driver';
+            $query = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Query';
+            var_dump( $this->_driver_exists( $query ) );
         }
 
-        /**
-         * @once
-         */
-        public function auth()
+        private function _driver_exists( $driver )
         {
-            $this->set_data( 'var', 1 );
-        }
-
-        public function success()
-        {
-            $this->set_data( 'var', 3 );
+            $driver = strtolower( str_replace( '\\', DIRECTORY_SEPARATOR, $driver ) );
+            return file_exists( \Core\Helper\PathHelper::root() . $driver . '.php' );
         }
 
     }

@@ -224,6 +224,18 @@ namespace Core\Engine;
             return $this->_meta[ 'methods' ][ $method ];
         }
 
+        public function get_namespace()
+        {
+            $reflection = new \ReflectionClass( $this->_class );
+            return $reflection->getNamespaceName();
+        }
+
+        public function get_shortname()
+        {
+            $reflection = new \ReflectionClass( $this->_class );
+            return $reflection->getShortName();
+        }
+
         public function is_property_public( $property )
         {
             $prop = new \ReflectionProperty( get_class( $this->_class ), $property );
@@ -240,6 +252,18 @@ namespace Core\Engine;
         {
             $prop = new \ReflectionProperty( get_class( $this->_class ), $property );
             return $prop->isProtected();
+        }
+
+        public function has_property( $property )
+        {
+            $reflection = new \ReflectionClass( $this->_class );
+            return $reflection->hasProperty( $property );
+        }
+
+        public function has_method( $method )
+        {
+            $reflection = new \ReflectionClass( $this->_class );
+            return $reflection->hasMethod( $method );
         }
 
     }

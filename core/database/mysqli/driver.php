@@ -24,24 +24,17 @@
  * THE SOFTWARE.
  */
 
-namespace Portfolio;
+namespace Core\Database\Mysqli
 {
 
     /**
-     * Portfolio Model
+     * Class Driver
      *
      * @author Luca Limardo
      */
-    class Model extends \Core\Engine\Model
+    class Driver
     {
-
-        /**
-         * @data_type varchar(45)
-         * @not_null
-         * @default "ciao"
-         */
-        public $firstname;
-
+        //put your code here
     }
 
 }

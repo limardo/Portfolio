@@ -50,10 +50,6 @@ namespace Core\Engine
                     $this->_data[ $k ] = $v;
                 }
             }
-            else if ( is_string( $data ) || is_numeric( $data ) )
-            {
-                $this->_data[ 'data' ] = $data;
-            }
         }
 
         public function get_data()

@@ -35,19 +35,13 @@ namespace Core\Engine;
     class Controller
     {
 
-        public $data;
+        protected $_data;
         protected $_view;
 
         public function __construct()
         {
-            $this->data = array();
-
             $model = str_replace( 'Controller', 'Model', get_called_class() );
-            if ( class_exists( $model ) )
-            {
-                $this->model = new $model();
-            }
-
+            $this->_data = array();
             $this->view = new \Core\Engine\View();
 
             $template = is_null( Registry::get( 'router' )->get_action() ) ? 'index' : Registry::get( 'router' )->get_action();
@@ -78,6 +72,11 @@ namespace Core\Engine;
                 }
             };
 
+            if ( class_exists( $model ) )
+            {
+                class_alias( $model, ucwords( $inspector->get_namespace() ) );
+            }
+
             $view_parse( $methodMeta );
         }
 
@@ -89,6 +88,21 @@ namespace Core\Engine;
         public function __set( $name, $value )
         {
             Registry::set( $name, $value );
+        }
+
+        public function get_data( $key = null )
+        {
+            if ( is_null( $key ) )
+            {
+                return $this->_data;
+            }
+
+            return isset( $this->_data[ $key ] ) ? $this->_data[ $key ] : null;
+        }
+
+        public function set_data( $key, $data = '' )
+        {
+            $this->_data[ $key ] = $data;
         }
 
     }

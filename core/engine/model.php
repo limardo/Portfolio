@@ -31,13 +31,68 @@ namespace Core\Engine;
      * Class Model
      *
      * @author Luca Limardo
+     * 
+     * Method Meta Accepted
+     * * @data_type
+     * * - int(n)
+     * * - varchar(n)
+     * * - datetime
+     * * - ...
+     * * @primary_key - not supported
+     * * @not_null
+     * * @unique
+     * * @is_bynary
+     * * @auto_increment
+     * * @default
+     * * - any
      */
-    class Model extends Base
+    class Model
     {
 
-        public function __clone()
+        private $_id;
+        private $_inspector;
+
+        public function __construct( $options = array() )
         {
-            
+            $this->_inspector = new \Core\Engine\Inspector( $this );
+            $this->_id = uniqid();
+            $this->_fill( $options );
+            return $this;
+        }
+
+        public function __set( $name, $value )
+        {
+            unset( $name, $value );
+        }
+
+        public function update( $data )
+        {
+            $this->_fill( $data );
+            return $this;
+        }
+
+        public function delete()
+        {
+            //Delete code
+        }
+
+        public function save()
+        {
+            //Save code
+        }
+
+        protected function _fill( $data )
+        {
+            if ( is_array( $data ) || is_object( $data ) )
+            {
+                foreach ( $data as $key => $value )
+                {
+                    if ( $this->_inspector->has_property( $key ) )
+                    {
+                        $this->$key = $value;
+                    }
+                }
+            }
         }
 
     }

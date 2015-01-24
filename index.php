@@ -57,6 +57,23 @@ $error = \Core\Engine\Error::initialize( true );
 \Core\Engine\Registry::set( 'error', $error );
 
 /**
+ * Database
+ */
+$database = new \Core\Engine\Database( array(
+            'driver'     => DB_DRIVER,
+            'parameters' => array(
+                        'hostname' => DB_HOSTNAME,
+                        'username' => DB_USERNAME,
+                        'password' => DB_PASSWORD,
+                        'schema'   => DB_DATABASE,
+                        'prefix'   => DB_PREFIX,
+                        'port'     => DB_PORT,
+                        'charset'  => DB_CHARSET
+            )
+        ) );
+\Core\Engine\Registry::set( 'db', $database );
+
+/**
  * Ruoter
  */
 $router = new \Core\Engine\Router();
@@ -68,6 +85,7 @@ $router = new \Core\Engine\Router();
 unset( $loader );
 unset( $log );
 unset( $error );
+unset( $database );
 unset( $router );
 
 /**

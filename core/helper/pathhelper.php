@@ -28,38 +28,16 @@ namespace Core\Helper;
 {
 
     /**
-     * Class UrlHelper
+     * Class PathHelper
      *
      * @author Luca Limardo
      */
-    class UrlHelper
+    class PathHelper
     {
 
         public static function root()
         {
-            $current = self::server();
-            $current .= current( StringHelper::split( $_SERVER[ "REQUEST_URI" ], 'index.php' ) );
-            return $current;
-        }
-
-        public static function current()
-        {
-            $current = self::server();
-            $current .= $_SERVER[ "REQUEST_URI" ];
-            return $current;
-        }
-
-        public static function server()
-        {
-            $current = @$_SERVER[ "HTTPS" ] == "on" ? "https://" : "http://";
-            $current .= $_SERVER[ "SERVER_NAME" ];
-
-            if ( $_SERVER[ "SERVER_PORT" ] != "80" && $_SERVER[ "SERVER_PORT" ] != "443" )
-            {
-                $current .= ":" . $_SERVER[ "SERVER_PORT" ];
-            }
-
-            return $current;
+            return defined( 'APP_PATH' ) ? APP_PATH : '.';
         }
 
     }
