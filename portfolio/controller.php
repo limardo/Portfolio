@@ -37,7 +37,7 @@ namespace Portfolio
 
         /**
          * @content_type html
-         * @template auth
+         * @template index
          * @dirname portfolio
          * @extension html
          * @before success,auth
@@ -46,27 +46,24 @@ namespace Portfolio
         public function index()
         {
             //$this->load->model( 'portfolio' );
+            $persons = \Portfolio::all();
+            $this->set_data( 'portfolios', $persons );
+        }
 
-            $person1 = array(
+        /**
+         * @template auth
+         */
+        public function create()
+        {
+
+            $p1 = array(
                         'firstname' => 'Luca',
                         'lastname'  => 'Limardo'
             );
 
-            $person2 = new \stdClass();
-            $person2->firstname = 'Marco';
-            $person2->lastname = 'Donna';
+            $person = \Portfolio::create( $p1 );
+            //$person->firstname = "Mario";
 
-            $p1 = new \Portfolio( $person1 );
-            $p2 = new \Portfolio( $person2 );
-            $p3 = new \Portfolio();
-
-            $p3->firstname = 'Valerio';
-            $p3->lastname = 'Grotta';
-/*
-            var_dump( $p1 );
-            $p1->update( array( 'id' => 100 ) )->delete();
-            var_dump( $p1 );
-*/
             $this->set_data( 'var', 2 );
         }
 
@@ -75,12 +72,12 @@ namespace Portfolio
          */
         public function auth()
         {
-            $this->set_data( 'var', 1 );
+            
         }
 
         public function success()
         {
-            $this->set_data( 'var', 3 );
+            
         }
 
     }

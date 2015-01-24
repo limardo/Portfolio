@@ -24,47 +24,27 @@
  * THE SOFTWARE.
  */
 
-namespace Core\Engine
+namespace Core\Database
 {
 
     /**
-     * Class Database
      *
      * @author Luca Limardo
      */
-    class Database extends Base
+    interface Query
     {
 
-        protected $_driver;
-        protected $_parameters;
-        protected $_connector;
+        public function get( $table );
 
-        public function __construct( $options = array() )
-        {
-            parent::__construct( $options );
+        public function get_where( $table, $where = array() );
 
-            $driver = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Driver';
-            $query = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Query';
+        public function set( $table, $values );
 
-            if ( $this->_driver_exists( $driver ) && $this->_driver_exists( $query ) )
-            {
-                $db = new $driver( $this->_parameters );
-                $this->_connector = new $query( array( 'connector' => $db ) );
-                $db->connect();
-            }
-        }
+        public function insert( $table, $values );
 
-        public function get_connector()
-        {
-            return $this->_connector;
-        }
+        public function update( $table, $values );
 
-        private function _driver_exists( $driver )
-        {
-            $filename = strtolower( str_replace( '\\', DIRECTORY_SEPARATOR, $driver ) );
-            return file_exists( \Core\Helper\PathHelper::root() . $filename . '.php' );
-        }
-
+        public function delete( $table, $where = null );
     }
 
 }

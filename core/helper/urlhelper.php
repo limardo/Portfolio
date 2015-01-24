@@ -24,45 +24,42 @@
  * THE SOFTWARE.
  */
 
-namespace Core\Engine
+namespace Core\Helper;
 {
 
     /**
-     * Class Database
+     * Class UrlHelper
      *
      * @author Luca Limardo
      */
-    class Database extends Base
+    class UrlHelper
     {
 
-        protected $_driver;
-        protected $_parameters;
-        protected $_connector;
-
-        public function __construct( $options = array() )
+        public static function root()
         {
-            parent::__construct( $options );
+            $current = self::server();
+            $current .= current( StringHelper::split( $_SERVER[ "REQUEST_URI" ], 'index.php' ) );
+            return $current;
+        }
 
-            $driver = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Driver';
-            $query = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Query';
+        public static function current()
+        {
+            $current = self::server();
+            $current .= $_SERVER[ "REQUEST_URI" ];
+            return $current;
+        }
 
-            if ( $this->_driver_exists( $driver ) && $this->_driver_exists( $query ) )
+        public static function server()
+        {
+            $current = @$_SERVER[ "HTTPS" ] == "on" ? "https://" : "http://";
+            $current .= $_SERVER[ "SERVER_NAME" ];
+
+            if ( $_SERVER[ "SERVER_PORT" ] != "80" && $_SERVER[ "SERVER_PORT" ] != "443" )
             {
-                $db = new $driver( $this->_parameters );
-                $this->_connector = new $query( array( 'connector' => $db ) );
-                $db->connect();
+                $current .= ":" . $_SERVER[ "SERVER_PORT" ];
             }
-        }
 
-        public function get_connector()
-        {
-            return $this->_connector;
-        }
-
-        private function _driver_exists( $driver )
-        {
-            $filename = strtolower( str_replace( '\\', DIRECTORY_SEPARATOR, $driver ) );
-            return file_exists( \Core\Helper\PathHelper::root() . $filename . '.php' );
+            return $current;
         }
 
     }

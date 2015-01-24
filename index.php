@@ -71,7 +71,7 @@ $database = new \Core\Engine\Database( array(
                         'charset'  => DB_CHARSET
             )
         ) );
-\Core\Engine\Registry::set( 'db', $database );
+\Core\Engine\Registry::set( 'db', $database->get_connector() );
 
 /**
  * Ruoter

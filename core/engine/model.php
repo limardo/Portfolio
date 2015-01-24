@@ -50,19 +50,37 @@ namespace Core\Engine;
     {
 
         private $_id;
+        private $_table;
+        private $_connector;
         private $_inspector;
+        private static $_instance;
 
-        public function __construct( $options = array() )
+        public function __construct()
         {
+            $this->_connector = Registry::get( 'db' );
             $this->_inspector = new \Core\Engine\Inspector( $this );
+
             $this->_id = uniqid();
-            $this->_fill( $options );
-            return $this;
+            $this->_table = strtolower( \Core\Helper\StringHelper::pluralize( $this->_inspector->get_namespace() ) );
         }
 
         public function __set( $name, $value )
         {
-            unset( $name, $value );
+            var_dump( $name );
+        }
+
+        public static function all()
+        {
+            self::_instance();
+            return self::$_instance->_connector->get( self::$_instance->_table )->rows();
+        }
+
+        public static function create( $options )
+        {
+            self::_instance();
+            self::$_instance->_fill( $options );
+            self::$_instance->_connector->insert( self::$_instance->_table, array( 'firstname' => 'mario' ) );
+            return self::$_instance;
         }
 
         public function update( $data )
@@ -78,10 +96,19 @@ namespace Core\Engine;
 
         public function save()
         {
-            //Save code
+            var_dump( $this->_table );
         }
 
-        protected function _fill( $data )
+        private static function _instance()
+        {
+            if ( is_null( self::$_instance ) )
+            {
+                $class = get_called_class();
+                self::$_instance = new $class();
+            }
+        }
+
+        private function _fill( $data )
         {
             if ( is_array( $data ) || is_object( $data ) )
             {

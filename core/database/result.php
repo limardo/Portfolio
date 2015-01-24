@@ -24,47 +24,35 @@
  * THE SOFTWARE.
  */
 
-namespace Core\Engine
+namespace Core\Database
 {
 
     /**
-     * Class Database
      *
      * @author Luca Limardo
      */
-    class Database extends Base
+    interface Result
     {
 
-        protected $_driver;
-        protected $_parameters;
-        protected $_connector;
+        public function rows_array();
 
-        public function __construct( $options = array() )
-        {
-            parent::__construct( $options );
+        public function rows();
 
-            $driver = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Driver';
-            $query = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Query';
+        public function row_array();
 
-            if ( $this->_driver_exists( $driver ) && $this->_driver_exists( $query ) )
-            {
-                $db = new $driver( $this->_parameters );
-                $this->_connector = new $query( array( 'connector' => $db ) );
-                $db->connect();
-            }
-        }
+        public function row();
 
-        public function get_connector()
-        {
-            return $this->_connector;
-        }
+        public function first_row();
 
-        private function _driver_exists( $driver )
-        {
-            $filename = strtolower( str_replace( '\\', DIRECTORY_SEPARATOR, $driver ) );
-            return file_exists( \Core\Helper\PathHelper::root() . $filename . '.php' );
-        }
+        public function last_row();
 
+        public function next_row();
+
+        public function previous_row();
+
+        public function num_rows();
+
+        public function num_fields();
     }
 
 }
