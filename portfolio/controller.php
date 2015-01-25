@@ -52,8 +52,7 @@ namespace Portfolio
 
         /**
          * @content_type plain
-         * @template auth
-         * @extension php
+         * @template create
          */
         public function create()
         {
