@@ -64,6 +64,11 @@ namespace Core\Engine;
             $this->_table = strtolower( \Core\Helper\StringHelper::pluralize( $this->_inspector->get_namespace() ) );
         }
 
+        public function __clone()
+        {
+            //Do nothing
+        }
+
         public function __set( $name, $value )
         {
             var_dump( $name );

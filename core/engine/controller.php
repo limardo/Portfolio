@@ -36,48 +36,18 @@ namespace Core\Engine;
     {
 
         protected $_data;
-        protected $_view;
 
         public function __construct()
         {
-            $model = str_replace( 'Controller', 'Model', get_called_class() );
             $this->_data = array();
-            $this->view = new \Core\Engine\View();
+            $model = str_replace( 'Controller', 'Model', get_called_class() );
 
-            $template = is_null( Registry::get( 'router' )->get_action() ) ? 'index' : Registry::get( 'router' )->get_action();
-            $dirname = is_null( Registry::get( 'router' )->get_controller() ) ? DEFAULT_CONTROLLER : Registry::get( 'router' )->get_controller();
-
-            $inspector = new \Core\Engine\Inspector( $this );
-            $methodMeta = $inspector->get_method_meta( $template );
-
-            $view_default = array(
-                        'content_type' => 'html',
-                        'template'     => $template,
-                        'dirname'      => $dirname,
-                        'extension'    => '.html'
-            );
-
-            $view_parse = function( $meta ) use ( $view_default )
-            {
-                foreach ( $view_default as $var => $default )
-                {
-                    $value = $default;
-
-                    if ( !empty( $meta[ '@' . $var ] ) )
-                    {
-                        $value = current( $meta[ '@' . $var ] );
-                    }
-
-                    $this->view->$var = $value;
-                }
-            };
+            $inspector = new Inspector( $this );
 
             if ( class_exists( $model ) )
             {
                 class_alias( $model, ucwords( $inspector->get_namespace() ) );
             }
-
-            $view_parse( $methodMeta );
         }
 
         public function __get( $name )

@@ -105,7 +105,7 @@ namespace Core\Engine;
             $instance = new $class( array(
                         'parameters' => $parameters,
                     ) );
-            \Core\Engine\Registry::set( 'controller', $instance );
+            Registry::set( 'controller', $instance );
 
             if ( !method_exists( $instance, $action ) )
             {
@@ -138,8 +138,17 @@ namespace Core\Engine;
             call_user_func_array( array( $instance, $action ), $parameters );
             $hooks( $methodMeta, '@after' );
 
-            $instance->view->set_data( $instance->get_data() );
-            $instance->view->render();
+
+            $view = new \Core\Engine\View( $instance );
+            Registry::set( 'view', $view );
+
+            $instance->db->connector->disconnect();
+            
+            $view->set_data( $instance->get_data() );
+            $view->render();
+
+            Registry::erase( 'controller' );
+            Registry::erase( 'view' );
         }
 
     }

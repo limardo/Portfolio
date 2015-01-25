@@ -66,6 +66,7 @@ namespace Core\Database\Mysqli
             {
                 $this->_is_connected = false;
                 $this->_service->close();
+                $this->_service = null;
             }
         }
 

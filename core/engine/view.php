@@ -32,14 +32,42 @@ namespace Core\Engine
      *
      * @author Luca Limardo
      */
-    class View extends Base
+    class View
     {
 
+        protected $_content_type;
         protected $_dirname;
-        protected $_content_type = 'text/html';
         protected $_template;
         protected $_extension = '.html';
+        protected $_default = array();
+        private $_ob_level;
+        private $_output;
         private $_data = array();
+
+        public function __construct( $controller )
+        {
+            $this->_data = array();
+            $this->_ob_level = ob_get_level();
+
+            $template = is_null( Registry::get( 'router' )->get_action() ) ? 'index' : Registry::get( 'router' )->get_action();
+            $dirname = is_null( Registry::get( 'router' )->get_controller() ) ? DEFAULT_CONTROLLER : Registry::get( 'router' )->get_controller();
+
+            $inspector = new Inspector( $controller );
+            $method = $inspector->get_method_meta( $template );
+
+            $this->_default = array(
+                        'content_type' => 'html',
+                        'template'     => $template,
+                        'dirname'      => $dirname,
+                        'extension'    => '.html'
+            );
+
+            $this->_parse( $method );
+
+            $this->_output = new Output( array(
+                        'content_type' => $this->_content_type
+                    ) );
+        }
 
         public function set_data( $data )
         {
@@ -66,14 +94,14 @@ namespace Core\Engine
                 extract( $this->_data );
 
                 ob_start();
-                require_once $filename;
-                $output = ob_get_contents();
+
+                include($filename);
+
+                $this->_output->append_output( ob_get_contents() );
+
                 ob_end_clean();
 
-                $this->_set_content_type();
-
-                header( 'Content-Type: ' . $this->content_type );
-                echo $output;
+                $this->_output->display();
             }
             else
             {
@@ -83,34 +111,25 @@ namespace Core\Engine
 
         private function _get_file()
         {
-            $this->extension = preg_replace( '/^(\.)/', '', $this->extension );
+            $this->_extension = preg_replace( '/^(\.)/', '', $this->_extension );
             return APP_PATH . DIRECTORY_SEPARATOR
-                    . strtolower( $this->dirname ) . DIRECTORY_SEPARATOR
-                    . strtolower( $this->template ) . '.' . strtolower( $this->extension );
+                    . strtolower( $this->_dirname ) . DIRECTORY_SEPARATOR
+                    . strtolower( $this->_template ) . '.' . strtolower( $this->_extension );
         }
 
-        private function _set_content_type()
+        private function _parse( $meta )
         {
-            switch ( $this->content_type )
+            foreach ( $this->_default as $var => $default )
             {
-                case 'js':
-                    $this->content_type = 'application/javascript';
-                    break;
-                case 'css':
-                    $this->content_type = 'text/css';
-                    break;
-                case 'xml':
-                    $this->content_type = 'application/xml';
-                    break;
-                case 'json':
-                    $this->content_type = 'application/json';
-                    break;
-                case 'html':
-                    $this->content_type = 'text/html';
-                    break;
-                case 'plain':
-                    $this->content_type = 'text/plain';
-                    break;
+                $value = $default;
+
+                if ( !empty( $meta[ '@' . $var ] ) )
+                {
+                    $value = current( $meta[ '@' . $var ] );
+                }
+
+                $key = '_' . $var;
+                $this->$key = $value;
             }
         }
 

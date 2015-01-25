@@ -37,6 +37,11 @@ namespace Core\Engine;
 
         private static $_data = array();
 
+        public function __clone()
+        {
+            //Do nothing
+        }
+
         public static function get( $key )
         {
             return isset( self::$_data[ $key ] ) ? self::$_data[ $key ] : null;
@@ -45,6 +50,11 @@ namespace Core\Engine;
         public static function set( $key, $value )
         {
             self::$_data[ $key ] = $value;
+        }
+
+        public static function erase( $key )
+        {
+            unset( serf::$_data[ $key ] );
         }
 
     }

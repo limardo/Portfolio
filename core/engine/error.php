@@ -129,7 +129,7 @@ namespace Core\Engine;
 
                 ob_start();
                 include APP_PATH . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'error' . DIRECTORY_SEPARATOR . $output . '.php';
-                ob_end_flush();
+                ob_end_clean();
             }
         }
 
