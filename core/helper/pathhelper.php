@@ -40,6 +40,12 @@ namespace Core\Helper;
             return defined( 'APP_PATH' ) ? APP_PATH : '.';
         }
 
+        public static function file_class_exists( $class )
+        {
+            $filename = strtolower( str_replace( '\\', DIRECTORY_SEPARATOR, $class ) );
+            return file_exists( self::root() . $filename . '.php' );
+        }
+
     }
 
 }

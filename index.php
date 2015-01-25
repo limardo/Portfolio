@@ -57,6 +57,14 @@ $error = \Core\Engine\Error::initialize( true );
 \Core\Engine\Registry::set( 'error', $error );
 
 /**
+ * Cache
+ */
+$cache = new \Core\Engine\Cache( array(
+            'driver' => 'memcache'
+        ) );
+\Core\Engine\Registry::set( 'cache', $cache->get_service() );
+
+/**
  * Database
  */
 $database = new \Core\Engine\Database( array(
@@ -80,15 +88,21 @@ $router = new \Core\Engine\Router();
 \Core\Engine\Registry::set( 'router', $router );
 
 /**
- * Unset all
+ * Test
  */
-unset( $loader );
-unset( $log );
-unset( $error );
-unset( $database );
-unset( $router );
+include 'test.php';
 
 /**
  * Init
  */
 \Core\Engine\Registry::get( 'router' )->dispatch();
+
+/**
+ * Unset all
+ */
+unset( $loader );
+unset( $log );
+unset( $error );
+unset( $cache );
+unset( $database );
+unset( $router );

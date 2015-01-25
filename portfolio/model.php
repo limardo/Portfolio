@@ -36,11 +36,14 @@ namespace Portfolio;
     {
 
         /**
-         * @data_type varchar(45)
-         * @not_null
-         * @default "ciao"
+         * @data_type varchar(100)
          */
         public $firstname;
+
+        /**
+         * @data_type varchar(100)
+         */
+        public $lastname;
 
     }
 

@@ -24,13 +24,38 @@ THE SOFTWARE.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Portfolio</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <?php foreach( $portfolios as $portfolio):?>
-        <h1><?php echo $portfolio->firstname;?></h1>
-        <?php endforeach;?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach( $portfolios as $portfolio):?>
+                <tr>
+                    <td><?php echo $portfolio->firstname;?></td>
+                    <td><?php echo $portfolio->lastname;?></td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="portfolio/update/<?php echo $portfolio->id;?>">Update</a>
+                            </li>
+                            <li>
+                                <a href="portfolio/delete/<?php echo $portfolio->id;?>">Delete</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <?php endforeach;?>
+            </tbody>
+        </table>
+        <a href="portfolio/create">Create</a>
     </body>
 </html>

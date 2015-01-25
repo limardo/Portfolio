@@ -52,7 +52,6 @@ namespace Portfolio
 
         /**
          * @content_type plain
-         * @template create
          */
         public function create()
         {
@@ -63,9 +62,28 @@ namespace Portfolio
             );
 
             $person = \Portfolio::create( $p1 );
-            //$person->firstname = "Mario";
+        }
 
-            $this->set_data( 'var', 2 );
+        /**
+         * @content_type plain
+         */
+        public function update( $id )
+        {
+
+            $p1 = array(
+                        'firstname' => 'Matteo',
+                        'lastname'  => 'Limardo'
+            );
+
+            $person = \Portfolio::update( $id, $p1 );
+        }
+
+        /**
+         * @content_type plain
+         */
+        public function delete( $id )
+        {
+            $person = \Portfolio::delete( $id );
         }
 
         /**

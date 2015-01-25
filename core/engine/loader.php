@@ -50,11 +50,27 @@ namespace Core\Engine;
                 if ( file_exists( $combined ) )
                 {
                     include( $combined );
-                    return;
+                    return true;
                 }
             }
-
+            
             trigger_error( 'Class: <b>' . $class . '</b> not found!', E_USER_ERROR );
+        }
+
+        private function _is_class_exists()
+        {
+            foreach ( debug_backtrace() as $debug )
+            {
+                if ( is_array( $debug ) )
+                {
+                    if ( in_array( 'class_exists', $debug ) )
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
         }
 
     }

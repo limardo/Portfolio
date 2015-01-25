@@ -28,35 +28,33 @@ namespace Core\Engine
 {
 
     /**
-     * Class Database
+     * Cache Class
      *
      * @author Luca Limardo
      */
-    class Database extends Base
+    class Cache extends Base
     {
 
-        protected $_driver = 'mysqli';
+        protected $_driver = 'memcache';
         protected $_parameters;
-        protected $_connector;
+        protected $_service;
 
         public function __construct( $options = array() )
         {
             parent::__construct( $options );
 
-            $driver = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Driver';
-            $query = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Query';
+            $driver = '\\Core\Cache\\' . ucfirst( $this->_driver ) . '\\Driver';
 
-            if ( \Core\Helper\PathHelper::file_class_exists( $driver ) && \Core\Helper\PathHelper::file_class_exists( $query ) )
+            if ( \Core\Helper\PathHelper::file_class_exists( $driver ) )
             {
-                $db = new $driver( $this->_parameters );
-                $this->_connector = new $query( array( 'connector' => $db ) );
-                $db->connect();
+                $this->_service = new $driver();
+                $this->_service->connect();
             }
         }
 
-        public function get_connector()
+        public function get_service()
         {
-            return $this->_connector;
+            return $this->_service;
         }
 
     }

@@ -84,24 +84,24 @@ namespace Core\Engine;
         {
             self::_instance();
             self::$_instance->_fill( $options );
-            self::$_instance->_connector->insert( self::$_instance->_table, array( 'firstname' => 'mario' ) );
+            self::$_instance->_connector->insert( self::$_instance->_table, self::$_instance );
             return self::$_instance;
         }
 
-        public function update( $data )
+        public static function update( $id, $options )
         {
-            $this->_fill( $data );
+            self::_instance();
+            self::$_instance->_fill( $options );
+            self::$_instance->_connector->where( array( 'id' => $id ) )->update( self::$_instance->_table, self::$_instance );
             return $this;
         }
 
-        public function delete()
+        public static function delete( $id )
         {
-            //Delete code
-        }
-
-        public function save()
-        {
-            var_dump( $this->_table );
+            self::_instance();
+            self::$_instance->_fill( $options );
+            self::$_instance->_connector->delete( self::$_instance->_table, array( 'id' => $id ) );
+            return $this;
         }
 
         private static function _instance()

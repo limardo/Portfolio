@@ -24,41 +24,25 @@
  * THE SOFTWARE.
  */
 
-namespace Core\Engine
+namespace Core\Cache
 {
 
     /**
-     * Class Database
      *
      * @author Luca Limardo
      */
-    class Database extends Base
+    interface Driver
     {
 
-        protected $_driver = 'mysqli';
-        protected $_parameters;
-        protected $_connector;
+        public function connect();
 
-        public function __construct( $options = array() )
-        {
-            parent::__construct( $options );
+        public function disconnect();
 
-            $driver = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Driver';
-            $query = '\\Core\Database\\' . ucfirst( $this->_driver ) . '\\Query';
+        public function get( $key, $default );
 
-            if ( \Core\Helper\PathHelper::file_class_exists( $driver ) && \Core\Helper\PathHelper::file_class_exists( $query ) )
-            {
-                $db = new $driver( $this->_parameters );
-                $this->_connector = new $query( array( 'connector' => $db ) );
-                $db->connect();
-            }
-        }
+        public function set( $key, $value, $duration );
 
-        public function get_connector()
-        {
-            return $this->_connector;
-        }
-
+        public function erase( $key );
     }
 
 }
