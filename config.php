@@ -27,7 +27,6 @@
 //Router
 define( 'DEFAULT_CONTROLLER', 'portfolio' );
 
-
 // MySql
 define( 'DB_DRIVER', 'mysqli' );
 define( 'DB_HOSTNAME', 'localhost' );
