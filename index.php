@@ -92,7 +92,6 @@ $router = new \Core\Engine\Router();
  */
 include 'test.php';
 
-
 /**
  * Init
  */
